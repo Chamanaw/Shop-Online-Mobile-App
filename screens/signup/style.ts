@@ -6,7 +6,7 @@ const style = StyleSheet.create({
         justifyContent:"center",
         rowGap:8,
         padding:20,
-        backgroundColor:"#ffff"
+        backgroundColor:"#ffff",
     },
     title:{
         fontWeight:'bold',
