@@ -11,7 +11,7 @@ export default function App() {
     <Provider store={store}>
       <View style={styles.container}>
           <NavigationContainer  >
-              <TabNavigator/>
+              <TabNavigator />
           </NavigationContainer>
         <StatusBar style="auto" />
       </View>
@@ -22,7 +22,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
   },
 
 });

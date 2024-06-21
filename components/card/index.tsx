@@ -1,6 +1,6 @@
 
 import { Card, Text } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet,TouchableOpacity  } from 'react-native';
 import axios from "../../services"
 
 type Props = {
@@ -9,14 +9,12 @@ type Props = {
     price: number
     image:string
     product_id:number
-    
+    navigation:any
 }
 
-function CardProduct({ category, name, price,image ,product_id}: Props) {
-
-  
+function CardProduct({ category, name, price,image ,product_id,navigation}: Props) {
     return (
-        <View >
+        <TouchableOpacity onPress={()=>navigation.navigate('HomeStack',{screen:'productDetail',params:{product_id:product_id}})}>
             <Card style={style.container} 
                 mode='contained'
             >
@@ -31,7 +29,7 @@ function CardProduct({ category, name, price,image ,product_id}: Props) {
                     <Text style={{color:"#ff4c3b"}}>฿ {price}</Text>
                 </Card.Content>
             </Card>
-        </View>
+        </TouchableOpacity>
     )
 }
 

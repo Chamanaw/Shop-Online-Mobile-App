@@ -9,6 +9,9 @@ import { Avatar, Text } from 'react-native-paper';
 import { IconButton } from 'react-native-paper';
 import { Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import { UseSelector, useSelector } from "react-redux";
+import { productSelector } from "../redux/slices/productSlice";
+import { Products } from "../mocks/data";
 
 
 export type RootStack = {
@@ -60,6 +63,9 @@ export function CartScreenStack() {
 const HomeStack = createNativeStackNavigator<HomeStackParam>()
 
 export function HomeScreenStack() {
+
+    const {currentProduct} = useSelector(productSelector)
+
     return (
         <HomeStack.Navigator initialRouteName="home">
             <HomeStack.Screen name='home' component={Home as any}
@@ -68,7 +74,6 @@ export function HomeScreenStack() {
                     headerRight: () => <IconButton
                         icon="bell-outline"
                         size={24}
-                        onPress={() => console.log('Pressed')}
                     />,
                     headerTitleAlign: "center",
                     headerTitle: () => <Image source={{ uri: "https://img.freepik.com/free-vector/detailed-click-collect-sign_23-2148779338.jpg?t=st=1713121176~exp=1713124776~hmac=2e3137ed87253b1b1c9985b1af639ac6cc96f72425e81bb4db9e98c93ba475d2&w=1380" }}
@@ -78,8 +83,8 @@ export function HomeScreenStack() {
                     />,
                 }}
             />
-            <HomeStack.Screen name='productDetail' component={ProductDetail} options={{
-                headerTitle: () => <Text variant='labelLarge' style={{ fontSize: 17 }}>{'Smart Phone'}</Text>,
+            <HomeStack.Screen name='productDetail' component={ProductDetail as any} options={{
+                headerTitle: () => <Text variant='labelLarge' style={{ fontSize: 17 }}>{currentProduct.c_name}</Text>,
                 animation: "fade_from_bottom",
                 contentStyle: { backgroundColor: "#ffffff" },
                 headerRight: () => <Ionicons name="cart" size={24} color="black" />,
@@ -118,7 +123,7 @@ export function LoginScreenStack() {
             <LoginStack.Screen name='login' component={Login as any} options={{
                 headerShown: false
             }} />
-            <LoginStack.Screen name='signup' component={Signup} options={{
+            <LoginStack.Screen name='signup' component={Signup as any} options={{
                 title: ""
             }} />
         </LoginStack.Navigator>

@@ -50,7 +50,7 @@ function HearderHomePage() {
 
                 </View>
                 <View style={{ marginTop: 15, marginBottom: 10 }}>
-                    <Text variant='headlineMedium' style={style.titleProduct}>Featured Products</Text>
+                    <Text variant='headlineMedium' style={style.titleProduct}>Products</Text>
                 </View>
             </View>
         </View>
@@ -68,15 +68,12 @@ function Home({ navigation }:Props) {
         dispatch(fetchProduct())
     }, [])
 
+
     return (
         <>
             <FlatList
                 data={product.products}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={()=>navigation.navigate('HomeStack',{screen:'productDetail'})}>
-                        <CardProduct category={item.c_name} name={item.name} price={item.price} image={item.image} product_id={item.product_id} />
-                    </TouchableOpacity>
-                )}
+                renderItem={({ item }) => (<CardProduct category={item.c_name} name={item.name} price={item.price} image={item.image} product_id={item.product_id} navigation={navigation}/>)}
                 keyExtractor={() => uuid.v4().toString()}
                 numColumns={2}
                 ListHeaderComponent={() => <HearderHomePage />}

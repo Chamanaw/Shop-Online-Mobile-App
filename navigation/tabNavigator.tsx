@@ -2,6 +2,14 @@ import { createBottomTabNavigator, } from '@react-navigation/bottom-tabs';
 import { HomeScreenStack,CartScreenStack,CategoryScreenStack,LoginScreenStack } from './stackNavigator';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { RootStack } from './stackNavigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { CommonActions } from '@react-navigation/native';
+
+type Home = NativeStackScreenProps<RootStack,'HomeStack'>
+type category = NativeStackScreenProps<RootStack,"CategoryStack">
+type cart = NativeStackScreenProps<RootStack,"CartStack">
+type login = NativeStackScreenProps<RootStack,"LoginStack">
+
 
 function TabNavigator (){
     const Tab = createBottomTabNavigator<RootStack>();
@@ -10,7 +18,6 @@ function TabNavigator (){
             tabBarLabelPosition: 'below-icon',
             tabBarActiveTintColor: "#ff4c3b",
             headerTintColor: "white",
-            
           }}>
             <Tab.Screen
               name='HomeStack'
@@ -19,7 +26,19 @@ function TabNavigator (){
                 tabBarLabel: "Home",
                 tabBarIcon: ({ color }) => <Ionicons name="home" size={22} color={color} />,
                 headerShown: false
+                
               }}
+              listeners={({ navigation }:Home) => ({
+                tabPress: e => {
+                  e.preventDefault();
+                  navigation.dispatch(
+                    CommonActions.reset({
+                      index: 0,
+                      routes: [{ name: 'HomeStack' }],
+                    })
+                  );
+                },
+              })}
             />
             <Tab.Screen
               name='CategoryStack'
@@ -28,8 +47,13 @@ function TabNavigator (){
                 tabBarLabel: "Category",
                 tabBarIcon: ({ color }) => <Ionicons name="list" size={24} color={color} />,
                 headerShown: false
-
               }}
+              listeners={({navigation}:category)=>({
+                tabPress:e=>{
+                  e.preventDefault()
+                  navigation.navigate('CategoryStack',{screen:"category"})
+                }
+              })}
             />
             <Tab.Screen
               name='CartStack'
@@ -38,8 +62,13 @@ function TabNavigator (){
                 tabBarLabel: "Cart",
                 tabBarIcon: ({ color }) => <Ionicons name="cart" size={24} color={color} />,
                 headerShown: false
-
               }}
+              listeners={({navigation}:cart)=>({
+                tabPress:e=>{
+                  e.preventDefault()
+                  navigation.navigate('CartStack',{screen:"cart"})
+                }
+              })}
             />
             <Tab.Screen
               name="LoginStack"
@@ -50,6 +79,17 @@ function TabNavigator (){
                 headerTitle: "Log in",
                 headerShown: false
               }}
+              listeners={({navigation}:login)=>({
+                  tabPress:e=>{
+                    e.preventDefault()
+                    navigation.dispatch(
+                      CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: 'LoginStack' }],
+                      })
+                    );
+                  }
+              })}
             />
           </Tab.Navigator>
     )

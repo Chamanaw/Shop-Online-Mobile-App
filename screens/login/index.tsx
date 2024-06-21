@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { View,Image } from 'react-native'
 import { TextInput, Text, Button } from 'react-native-paper';
 import style from './style';
-import { login,userSelector,fetchUser,errorMessage } from '../../redux/slices/userSlice';
+import { login,userSelector,fetchUser,errorMessage, resetErrorMessage } from '../../redux/slices/userSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispacth } from '../../redux/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,8 +35,8 @@ function Login({navigation}:Props) {
     }
 
     useEffect(()=>{
-        navigation.navigate('HomeStack',{screen:"home"})
-    },[user])
+        dispatch(resetErrorMessage())
+    },[])
 
     return (
         <View style={style.container}>
@@ -56,7 +56,6 @@ function Login({navigation}:Props) {
                     outlineColor='#bdbdbd'
                     activeOutlineColor='#039be5'
                     selectionColor='black'
-                    left={<TextInput.Icon icon='account' />}
                     outlineStyle={{ backgroundColor: "#fafafa"}}
                 />
                 <TextInput
@@ -68,12 +67,11 @@ function Login({navigation}:Props) {
                     outlineColor='#bdbdbd'
                     activeOutlineColor='#039be5'
                     selectionColor='black'
-                    left={<TextInput.Icon icon='lock' />}
                     outlineStyle={{ backgroundColor: "#fafafa"}}
                 />
                 <Button mode="contained" buttonColor='#ff4c3b' style={{ borderRadius: 5, marginTop: 10 }} onPress={handleSubmit} loading={user.loading}>Continue</Button>
                 <View style={style.linkContainer}>
-                   <Text style={style.textSignup} onPress={() => navigation.navigate("signup" as never)}>Sign up</Text>
+                   <Text style={style.textSignup} onPress={() => navigation.navigate("LoginStack",{screen:"signup"})}>Sign up</Text>
                     <Text style={style.textSignup}>Forgot your password?</Text>
                 </View>
             </View>
