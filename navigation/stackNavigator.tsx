@@ -11,8 +11,6 @@ import { Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { UseSelector, useSelector } from "react-redux";
 import { productSelector } from "../redux/slices/productSlice";
-import { Products } from "../mocks/data";
-
 
 export type RootStack = {
     HomeStack:any;
