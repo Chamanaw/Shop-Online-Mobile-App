@@ -2,11 +2,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const pathRequestToken = [
-    "/api/user",
-    "/api/refreshtoken",
-    "/api/cart",
-    "/api/addproduct",
-    "/api/deleteitem"
+    "/api/user/getuser",
+    "/api/cart/getcart",
+    "/api/cart/addproduct",
+    "/api/cart/deleteitem",
+    "/api/user/updateusername",
+    "/api/user/updatepassword",
+    "/api/user/updateEmail"
 ]
 
 const instance = axios.create({
@@ -15,7 +17,7 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(async (config) => {
-    const pathToken = pathRequestToken.some((ele) => config.url?.includes(ele))
+    const pathToken = pathRequestToken.some((ele) => config.url === ele)
     if (pathToken) {
         const accessToken = await AsyncStorage.getItem('accessToken')
         config.headers.Authorization = "Bearer " + accessToken
