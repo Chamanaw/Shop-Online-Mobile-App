@@ -28,8 +28,7 @@ const style = StyleSheet.create({
     },
     titleProduct:{
         paddingLeft:15,
-        fontSize:17,
-        fontWeight:"700",
+        fontWeight:"bold",
     },
 
 })
