@@ -16,18 +16,18 @@ const initialState:cartState = {
 }
 
 export const fetchCart = createAsyncThunk('cart/fetchcart',async()=>{
-    const response = await axios.get('/api/cart')
-    return response.data
+    const result = await axios.get('/api/cart/getcart')
+    return result.data
 })
 
-export const addToCart = createAsyncThunk('cart/addtocart',async(product_id:number)=>{
-    const response = await axios.post('/api/addproduct')
-    return response.data
+export const addToCart = createAsyncThunk('cart/addtocart',async(items:ProductType)=>{
+    await axios.post('/api/cart/addproduct',{product_id:items.product_id})
+    return items
 })
 
-export const deleteItem = createAsyncThunk('cart/deleteitem',async(product_id:number)=>{
-    const response = await axios.delete('/api/deleteitem')
-    return response.data
+export const deleteItem = createAsyncThunk('cart/deleteItem',async(product_id:number)=>{
+    await axios.delete('/api/cart/deleteitem',{data:{product_id:product_id}})
+    return product_id
 })
 
 const cartSlice = createSlice({
@@ -43,13 +43,17 @@ const cartSlice = createSlice({
             state.loading = false
             state.error = 'error'
         })
-        builder.addMatcher((action)=>action.type.endsWith('/fulfilled'),(state,action:PayloadAction<ProductType[] | ProductType>)=>{
+        builder.addMatcher((action)=>action.type.endsWith('/fulfilled'),(state,action:PayloadAction<ProductType[] | ProductType | number>)=>{
             if(action.type.includes("fetchcart")){
                 state.cart = action.payload as ProductType[]
             }
             else if(action.type.includes("addtocart")){
-                state.cart.push(action.payload as ProductType)
-            } 
+                state.cart = [...state.cart,action.payload as ProductType]
+            }
+            else if (action.type.includes("deleteItem" )){
+                const result  = state.cart.filter((ele)=>ele.product_id != action.payload as number)
+                state.cart = result
+            }
         })
     }
 })

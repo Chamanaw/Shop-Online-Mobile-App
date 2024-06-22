@@ -13,6 +13,9 @@ import { useSelector } from 'react-redux';
 import { fetchProduct, productSelector } from "../../redux/slices/productSlice";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStack } from "../../navigation/stackNavigator";
+import axios from "../../services";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { fetchUser } from "../../redux/slices/userSlice";
 
 function HearderHomePage() {
     const [headerHeight, setHeaderHeight] = useState<number>();
@@ -50,7 +53,7 @@ function HearderHomePage() {
 
                 </View>
                 <View style={{ marginTop: 15, marginBottom: 10 }}>
-                    <Text variant='headlineMedium' style={style.titleProduct}>Products</Text>
+                    <Text variant='titleLarge' style={style.titleProduct}>Products</Text>
                 </View>
             </View>
         </View>
@@ -64,9 +67,19 @@ function Home({ navigation }:Props) {
     const product = useSelector(productSelector)
     const dispatch = useAppDispacth()
 
+    const checkUser = async()=>{
+        const access_token = await AsyncStorage.getItem("accessToken")
+        if(!access_token){
+            return
+        }
+        await dispatch(fetchUser())
+    }
     useEffect(() => {
         dispatch(fetchProduct())
-    }, [])
+        checkUser()
+    },[])
+
+
 
 
     return (

@@ -43,13 +43,7 @@ export const login = createAsyncThunk('user/login', async (payload: UserLogin) =
     return false
 })
 export const signup = createAsyncThunk('/user/signup', async (payload: UserSigup) => {
-
-    const result = await axios.post('/api/user/signup', payload)
-    if (result.status === 200) {
-        return true
-    }
-    return false
-
+    await axios.post('/api/user/signup', payload)
 })
 
 
@@ -70,24 +64,34 @@ const userSlice = createSlice({
         resetErrorMessage:(state)=>{
             state.errorSignup = ''
             state.error = ''
+        },
+        resetState:(state)=>{
+            state.user= null
+            state.error=''
+            state.errorSignup=''
+            state.dialogSignup=false
+            state.loading = false
         }
     },
     extraReducers: (builder) => {
         builder.addMatcher((action) => action.type.endsWith("/pending"), (state) => {
             state.loading = true
         })
-        builder.addMatcher((action) => action.type.endsWith("/fulfilled"), (state, action: PayloadAction<UserType | boolean>) => {
+        builder.addMatcher((action) => action.type.endsWith("/fulfilled"), (state, action: PayloadAction<UserType>) => {
             state.loading = false
             if (action.type.includes('fetchuser')) {
                 state.user = action.payload as UserType
                 state.error = ''
+                state.loading = false
             }
             else if (action.type.includes('login')) {
                 state.error = ''
+                state.loading = false
             }
             else if (action.type.includes('signup')) {
                 state.dialogSignup = true
                 state.error = ''
+                state.loading = false
             }
 
         })
@@ -102,7 +106,7 @@ const userSlice = createSlice({
 })
 
 
-export const { errorMessage,setDialogSignup,errorSignup,resetErrorMessage } = userSlice.actions
+export const { errorMessage,setDialogSignup,errorSignup,resetErrorMessage,resetState } = userSlice.actions
 export const userSelector = (store: RootState) => store.user
 export default userSlice.reducer
 
