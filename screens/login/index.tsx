@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStack } from '../../navigation/stackNavigator';
 
-type Props = NativeStackScreenProps<RootStack,"LoginStack">
+type Props = NativeStackScreenProps<RootStack,"ProfileStack">
 
 function Login({navigation}:Props) {
 
@@ -31,6 +31,7 @@ function Login({navigation}:Props) {
             return
         }
         await dispatch(fetchUser())
+        navigation.navigate("HomeStack",{screen:"home"})
 
     }
 
@@ -40,10 +41,8 @@ function Login({navigation}:Props) {
 
     return (
         <View style={style.container}>
-            <Image source={{ uri: "https://img.freepik.com/free-vector/detailed-click-collect-sign_23-2148779338.jpg?t=st=1713121176~exp=1713124776~hmac=2e3137ed87253b1b1c9985b1af639ac6cc96f72425e81bb4db9e98c93ba475d2&w=1380" }}
-                        width={200}
-                        height={50}
-                        style={{ marginTop: 5 }}
+            <Image source={require("../../assets/logo/logo-App.jpg")}
+                        style={{ marginTop: 5,width:200,height:100 }}
             />
             <View style={style.subContainer}>
                 <Text variant='titleLarge' style={style.title}>Log in</Text>
@@ -71,7 +70,7 @@ function Login({navigation}:Props) {
                 />
                 <Button mode="contained" buttonColor='#ff4c3b' style={{ borderRadius: 5, marginTop: 10 }} onPress={handleSubmit} loading={user.loading}>Continue</Button>
                 <View style={style.linkContainer}>
-                   <Text style={style.textSignup} onPress={() => navigation.navigate("LoginStack",{screen:"signup"})}>Sign up</Text>
+                   <Text style={style.textSignup} onPress={() => navigation.navigate("ProfileStack",{screen:"signup"})}>Sign up</Text>
                     <Text style={style.textSignup}>Forgot your password?</Text>
                 </View>
             </View>

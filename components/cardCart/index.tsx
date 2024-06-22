@@ -1,34 +1,44 @@
 import { View, StyleSheet, Image } from 'react-native'
 import { Text, IconButton } from 'react-native-paper';
+import { useAppDispacth } from '../../redux/store';
+import { deleteItem } from '../../redux/slices/cartSlice';
+import { ProductType } from '../../types';
+import axios from '../../services';
 
 type Props = {
-    name: string
-    price: number
-    brand: string
-    background: string
+    items:ProductType
+    background:string
 }
 
-function CardCart({ name, price, brand, background }: Props) {
+function CardCart({items,background}: Props) {
+
+    const dispatch = useAppDispacth()
+
+    const handeleRemoveItem = async()=>{
+        await dispatch(deleteItem(items.product_id))
+    }
+
     return (
         <View style={{backgroundColor:`${background}`}}>
             <View style={styles.container}>
                 <View style={styles.subContainer}>
                     <Image
-                        source={{ uri: 'https://dtaconline.dtac.co.th/pub/media/catalog/product/cache/e96373d1c57081d0b326a3dfa1f55e67/p/a/packshot-iphone-15-pro-max-black_20.png' }}
+                        source={{uri:axios.getUri()+items.image}}
                         style={styles.image}
                         resizeMode='contain'
                     />
                     <View>
-                        <Text>{name}</Text>
-                        <Text variant='bodySmall' style={{ color: "gray" }}>{brand}</Text>
+                        <Text>{items.name}</Text>
+                        <Text variant='bodySmall' style={{ color: "gray" }}>{items.brand}</Text>
                     </View>
                 </View>
                 <View>
-                    <Text style={{ color: "red" }}>฿{price}</Text>
+                    <Text style={{ color: "red" }}>฿{items.price}</Text>
                 </View>
                 <IconButton
                     icon="delete"
                     size={20}
+                    onPress={handeleRemoveItem}
                 />
             </View>
         </View>
@@ -50,6 +60,7 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
+        width:130
     }
 })

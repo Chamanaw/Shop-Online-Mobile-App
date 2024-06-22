@@ -9,6 +9,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStack } from "../../navigation/stackNavigator";
 import { current } from "../../redux/slices/productSlice";
 import { useAppDispacth } from "../../redux/store";
+import { addToCart } from "../../redux/slices/cartSlice";
 
 type Props = NativeStackScreenProps<RootStack, "HomeStack">;
 
@@ -16,6 +17,11 @@ function ProductDetail({ route }: Props) {
   const p_id = route.params?.product_id;
   const { products, currentProduct } = useSelector(productSelector);
   const dispatch = useAppDispacth();
+
+  const addProduct = async()=>{
+      await dispatch(addToCart(currentProduct))
+  }
+
   useEffect(() => {
     let result = products.filter((ele) => ele.product_id === p_id);
     dispatch(current(result[0]));
@@ -39,6 +45,7 @@ function ProductDetail({ route }: Props) {
             textColor="#002379"
             style={style.buttonAddCart}
             icon="cart-outline"
+            onPress={addProduct}
           >
             Add to Cart
           </Button>

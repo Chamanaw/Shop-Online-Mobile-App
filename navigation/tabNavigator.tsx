@@ -4,15 +4,23 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { RootStack } from './stackNavigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CommonActions } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../redux/slices/userSlice';
+import { cartSelector } from '../redux/slices/cartSlice';
+
 
 type Home = NativeStackScreenProps<RootStack,'HomeStack'>
 type category = NativeStackScreenProps<RootStack,"CategoryStack">
 type cart = NativeStackScreenProps<RootStack,"CartStack">
-type login = NativeStackScreenProps<RootStack,"LoginStack">
+type profile = NativeStackScreenProps<RootStack,"ProfileStack">
 
 
 function TabNavigator (){
+
+    const {cart} = useSelector(cartSelector)
     const Tab = createBottomTabNavigator<RootStack>();
+    const user = useSelector(userSelector)
+
     return(
         <Tab.Navigator screenOptions={{
             tabBarLabelPosition: 'below-icon',
@@ -61,7 +69,8 @@ function TabNavigator (){
               options={{
                 tabBarLabel: "Cart",
                 tabBarIcon: ({ color }) => <Ionicons name="cart" size={24} color={color} />,
-                headerShown: false
+                headerShown: false,
+                tabBarBadge: cart.length
               }}
               listeners={({navigation}:cart)=>({
                 tabPress:e=>{
@@ -71,7 +80,7 @@ function TabNavigator (){
               })}
             />
             <Tab.Screen
-              name="LoginStack"
+              name="ProfileStack"
               component={LoginScreenStack}
               options={{
                 tabBarLabel: "User",
@@ -79,15 +88,10 @@ function TabNavigator (){
                 headerTitle: "Log in",
                 headerShown: false
               }}
-              listeners={({navigation}:login)=>({
+              listeners={({navigation}:profile)=>({
                   tabPress:e=>{
                     e.preventDefault()
-                    navigation.dispatch(
-                      CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: 'LoginStack' }],
-                      })
-                    );
+                    navigation.navigate('ProfileStack',{screen:(user.user)?'profile':'login'})
                   }
               })}
             />
