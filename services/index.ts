@@ -34,14 +34,15 @@ instance.interceptors.response.use((response) => {
 },
     async(error) => {
         const originalRequest = error.config;
-        if(error.response.status === 401 && originalRequest._retry){
+        if(error.response.status === 401 && !originalRequest._retry){
             originalRequest._retry = true
             try{
-                const refreshtoken = await AsyncStorage.getItem("refreshtoken")
-                if(refreshtoken){
-                    const newToken =  await refresh(refreshtoken)
+                const refreshToken = await AsyncStorage.getItem("refreshToken")
+                if(refreshToken){
+                    const newToken =  await refresh(refreshToken)
                     originalRequest.headers.Authorization = "Bearer "+newToken
-                    await axios.get(originalRequest)
+                    return await axios(originalRequest)
+                    
                 }
             }   
             catch(error){
@@ -57,7 +58,17 @@ instance.interceptors.response.use((response) => {
 
 
 const refresh = async(token:string)=>{
-    return await axios.post("/api/refreshtoken")
+    try{
+        const result = await instance.post("/api/refreshtoken",{},{headers:{Authorization:"Brarer "+token}})
+        if(result.data.accessToken){
+            await AsyncStorage.setItem("accessToken",result.data.accessToken)
+            await AsyncStorage.setItem("refreshToken",result.data.refreshToken)
+            return result.data.accessToken
+        }
+    }catch(err){
+        return new Error("Unauthorized");
+    }
+    
 }
 
 
