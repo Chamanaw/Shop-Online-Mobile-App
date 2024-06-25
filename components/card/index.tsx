@@ -2,19 +2,18 @@
 import { Card, Text } from 'react-native-paper';
 import { StyleSheet,TouchableOpacity  } from 'react-native';
 import axios from "../../services"
+import { ProductType } from '../../types';
 
 type Props = {
-    category: string
-    name: string
-    price: number
-    image:string
-    product_id:number
+    dataProduct:ProductType
     navigation:any
+    stack:string
 }
 
-function CardProduct({ category, name, price,image ,product_id,navigation}: Props) {
+function CardProduct({ dataProduct,navigation,stack}: Props) {
+    const {product_id,image,name,price,c_name} = dataProduct
     return (
-        <TouchableOpacity onPress={()=>navigation.navigate('HomeStack',{screen:'productDetail',params:{product_id:product_id}})}>
+        <TouchableOpacity onPress={()=>navigation.navigate(stack,{screen:'productDetail',params:{product_id:product_id}})}>
             <Card style={style.container} 
                 mode='contained'
             >
@@ -24,7 +23,7 @@ function CardProduct({ category, name, price,image ,product_id,navigation}: Prop
                     resizeMode='contain'
                 />
                 <Card.Content style={{paddingLeft:0,paddingBottom:0}}>
-                    <Text variant="labelMedium" style={{color:"gray"}}>{category}</Text> 
+                    <Text variant="labelMedium" style={{color:"gray"}}>{c_name}</Text> 
                     <Text variant="labelLarge" >{name}</Text>
                     <Text style={{color:"#ff4c3b"}}>฿ {price}</Text>
                 </Card.Content>
@@ -39,10 +38,10 @@ const style = StyleSheet.create({
     container: {
         width: 170,
         borderRadius: 5,
-        margin: 8,
         marginBottom:10,
         marginTop:0,
         backgroundColor:"white",
+        
     },
     image:{
         borderBottomLeftRadius: 10,
