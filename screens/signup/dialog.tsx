@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button, Dialog, Portal, PaperProvider, Text } from 'react-native-paper';
+
+import {StyleSheet } from 'react-native';
+import { Button, Dialog, Text } from 'react-native-paper';
 
 
 
@@ -20,7 +20,7 @@ const DialogSignup = ({ open, setDialog,navigation }: Props) => {
             <Dialog.Actions>
                 <Button onPress={() =>{
                     setDialog(false)
-                    navigation.navigate("LoginStack",{screen:"login"})
+                    navigation.navigate("ProfileStack",{screen:"login"})
                 }}> <Text style={style.botton}>Done</Text></Button>
             </Dialog.Actions>
         </Dialog>

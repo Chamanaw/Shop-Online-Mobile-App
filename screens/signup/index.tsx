@@ -1,18 +1,16 @@
 import { View } from "react-native";
 import { TextInput, Text, Button, HelperText } from "react-native-paper";
 import style from "./style";
-import { useState } from "react";
 import DialogSignup from "./dialog";
 import { useAppDispacth } from "../../redux/store";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStack } from "../../navigation/stackNavigator";
-import { errorMessage ,errorSignup,signup } from "../../redux/slices/userSlice";
+import { errorMessage,signup,userSelector ,resetErrorMessage  } from "../../redux/slices/userSlice";
 import { useSelector } from "react-redux";
-import { userSelector ,resetErrorMessage } from "../../redux/slices/userSlice";
-import { useEffect } from "react";
+import { useEffect ,useState } from "react";
 
 
-type Props = NativeStackScreenProps<RootStack, "LoginStack">;
+type Props = NativeStackScreenProps<RootStack, "ProfileStack">;
 
 function Signup({ navigation }: Props) {
     const [username, setUsername] = useState<string>("");
@@ -26,32 +24,25 @@ function Signup({ navigation }: Props) {
     const user = useSelector(userSelector);
 
     const handleSubmit = async () => {
-
-        const user_validation = username.match(/\w{5,}/);
-        const password_validation = password.match(/\w{5,}/);
-        const email_validation = email.match(/\w{5,}\@\w{5,}/);
-
-        if (!user_validation && !password_validation && !email_validation) {
+        if(!username || !password || !email) {
             setErr(true)
-            await dispatch(errorSignup("Please complete all fields"))
             return;
         }
 
+        setErr(false)
         if(password === matchPass){
             const data = {username,password,email}
             await dispatch(signup(data))
-            dispatch(errorMessage(''))
+            await dispatch(errorMessage(''))
+            setShowDialog(true);
         }
         else{
-            dispatch(errorMessage("Passwords do not match"))
+            setMatchPass('')
+            setErr(true)
         }
-        setShowDialog(true);
+        
 
     };
-
-    useEffect(()=>{
-        dispatch(resetErrorMessage())
-    },[])
 
     return (
         <>
@@ -59,11 +50,6 @@ function Signup({ navigation }: Props) {
                 <Text variant="titleLarge" style={style.title}>
                     Sign up
                 </Text>
-
-                {user.errorSignup && <Text variant="bodyMedium" style={{ color: "red" }}>
-                    {user.errorSignup}
-                </Text>}
-
                 <TextInput
                     mode="outlined"
                     label="Username"
@@ -71,10 +57,10 @@ function Signup({ navigation }: Props) {
                     outlineColor="#bdbdbd"
                     activeOutlineColor="#039be5"
                     selectionColor="black"
-                    onChangeText={(text) => setUsername(text)}
+                    onChangeText={(text) =>text.match(/\w{5,}/)?setUsername(text):setUsername('')}
                     error={(!username && err) ? true : false}
                 />
-                <HelperText type="info">Can only be used a-z A-Z 0-9</HelperText>
+                <HelperText type="info">Can only be used a-z A-Z 0-9 more than 5 character</HelperText>
                 <TextInput
                     mode="outlined"
                     label="Password"
@@ -83,10 +69,10 @@ function Signup({ navigation }: Props) {
                     outlineColor="#bdbdbd"
                     activeOutlineColor="#039be5"
                     selectionColor="black"
-                    onChangeText={(text) => setPassword(text)}
+                    onChangeText={(text) =>text.match(/\w{5,}/)?setPassword(text):setPassword('')}
                     error={!password && err? true : false}
                 />
-                <HelperText type="info">Can only be used a-z A-Z 0-9</HelperText>
+                <HelperText type="info">Can only be used a-z A-Z 0-9 more than 5 character</HelperText>
                 <TextInput
                     mode="outlined"
                     label="Password Again"
@@ -95,7 +81,7 @@ function Signup({ navigation }: Props) {
                     outlineColor="#bdbdbd"
                     activeOutlineColor="#039be5"
                     selectionColor="black"
-                    onChangeText={(text) => setMatchPass(text)}
+                    onChangeText={(text) =>setMatchPass(text)}
                     error={!matchPass && err ? true : false}
                 />
                 <HelperText type="info">Enter the passwords to match.</HelperText>
@@ -105,7 +91,7 @@ function Signup({ navigation }: Props) {
                     style={{ backgroundColor: "#fafafa", zIndex: 0 }}
                     activeOutlineColor="#039be5"
                     selectionColor="black"
-                    onChangeText={(text) => setEmail(text)}
+                    onChangeText={(text) =>text.match(/\w{5,}\@\w{5,}/)?setEmail(text):setEmail('')}
                     error={ !email && err ? true : false}
                 />
                 <Button
