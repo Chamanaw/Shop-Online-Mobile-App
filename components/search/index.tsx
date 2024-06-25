@@ -1,10 +1,19 @@
-import { StatusBar, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Searchbar } from 'react-native-paper';
 import { useState } from 'react';
 
-function Search() {
+
+interface Props{
+    navigation:any
+}
+
+function Search({navigation}:Props) {
 
     const [searchQuery, setSearchQuery] = useState('');
+
+    const handelSearch = ()=>{
+        navigation.navigate("SearchStack",{screen:"resultSearch",params:{keyword:searchQuery}})
+    }
 
     return (
         <View style={style.container}>
@@ -18,6 +27,7 @@ function Search() {
                 }}
                 placeholderTextColor="gray"
                 selectionColor="#757575"
+                onSubmitEditing={handelSearch}
             />
         </View>
     )

@@ -6,7 +6,7 @@ export interface ProductType{
     price:number
     stock_quantity:number
     color:string
-    memory:number
+    memory:string | null
     c_name:string
     image:string
     brand:string
@@ -31,7 +31,7 @@ export const defaultValueProduct = {
     price:0,
     stock_quantity:0,
     color:'',
-    memory:0,
+    memory:'',
     c_name:'',
     image:'',
     brand:''

@@ -5,7 +5,8 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 const style = StyleSheet.create({
     container:{
         padding:20,
-        backgroundColor:"#ffffff"
+        backgroundColor:"#fff",
+        flex:1,
     },
     image:{
         width:"100%",

@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Cart from "../screens/cart";
-import Category from "../screens/category";
+import Search from "../screens/search";
 import Home from "../screens/home";
 import ProductDetail from "../screens/productDetail";
 import Login from "../screens/login";
@@ -18,10 +18,12 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { resetState } from "../redux/slices/userSlice";
 import { useAppDispacth } from "../redux/store";
+import { resetCart } from "../redux/slices/cartSlice";
+import ResultSearch from "../screens/resultSearch";
 
 export type RootStack = {
   HomeStack: any;
-  CategoryStack: any;
+  SearchStack: any;
   CartStack: any;
   ProfileStack: any;
 };
@@ -36,11 +38,14 @@ export type HomeStackParam = {
   };
 };
 
-export type CategoryStackParam = {
-  category: undefined;
+export type SearchStackParam = {
+  search: undefined;
   productDetail: {
     product_id: number;
   };
+  resultSearch:{
+    keyword:string
+  }
 };
 
 export type ProfileStackParam = {
@@ -69,31 +74,31 @@ const HomeStack = createNativeStackNavigator<HomeStackParam>();
 
 export function HomeScreenStack() {
   const { currentProduct } = useSelector(productSelector);
-  const user = useSelector(userSelector);
+  const {user} = useSelector(userSelector);
   return (
     <HomeStack.Navigator initialRouteName="home">
       <HomeStack.Screen
         name="home"
         component={Home as any}
         options={{
-          headerLeft: () =>
-            user.user ? (
+          headerLeft: () => 
+            user.image ? (
               <Avatar.Image
                 size={37}
-                source={{ uri: axios.getUri() + user.user?.image }}
+                source={{ uri: axios.getUri() + user?.image }}
               />
             ) : (
               <Avatar.Icon
                 size={37}
                 icon="account"
-                style={{ backgroundColor: "#4c4c4c" }}
+                style={{ backgroundColor: "#bbb" }}
               />
             ),
           headerRight: () => <IconButton icon="bell-outline" size={24} />,
           headerTitleAlign: "center",
           headerTitle: () => (
             <Image
-              source={require("../assets/logo/logo-App.jpg")}
+              source={require("../assets/logo/logo-App.png")}
               style={{ marginTop: 5,width:110,height:50 }}
             />
           ),
@@ -119,24 +124,28 @@ export function HomeScreenStack() {
   );
 }
 
-const CategoryStack = createNativeStackNavigator<CategoryStackParam>();
+const SearchStack = createNativeStackNavigator<SearchStackParam>();
 
-export function CategoryScreenStack() {
+export function SearchScreenStack() {
+
+  const { currentProduct } = useSelector(productSelector);
+  
   return (
-    <CategoryStack.Navigator
+    <SearchStack.Navigator
       screenOptions={{
-        headerTitle: "Categories",
-        headerRight: () => (
-          <IconButton
-            icon="bell-outline"
-            size={24}
-            onPress={() => console.log("Pressed")}
-          />
-        ),
+        headerTitle: "Search",
       }}
     >
-      <CategoryStack.Screen name="category" component={Category} />
-    </CategoryStack.Navigator>
+      <SearchStack.Screen name="search" component={Search as any}/>
+      <SearchStack.Screen name="resultSearch" component={ResultSearch as any} options={{
+        contentStyle:{backgroundColor:"#ffffff"}
+      }}/>
+      <SearchStack.Screen name="productDetail" component={ProductDetail as any} options={{
+        headerTitle:currentProduct.c_name,
+        headerTitleAlign:"center",
+        contentStyle:{backgroundColor:"#fff"}
+      }}/>
+    </SearchStack.Navigator>
   );
 }
 
@@ -165,6 +174,7 @@ export function LoginScreenStack({ navigation }: Props) {
         name="profile"
         component={Profile as any}
         options={{
+          headerLeft:()=>"",
           title: "Profile",
           headerTitleAlign: "center",
           headerRight: () => (
@@ -176,6 +186,7 @@ export function LoginScreenStack({ navigation }: Props) {
                 await AsyncStorage.removeItem("accessToken");
                 await AsyncStorage.removeItem("refreshToken");
                 await dispatch(resetState());
+                await dispatch(resetCart());
                 navigation.navigate("ProfileStack", { screen: "login" });
               }}
             />

@@ -7,11 +7,10 @@ import { cartSelector } from "../../redux/slices/cartSlice";
 import { useAppDispacth } from "../../redux/store";
 import { useEffect } from "react";
 import { fetchCart } from "../../redux/slices/cartSlice";
-import axios from "../../services";
 
 function Cart (){
 
-    const cart =  useSelector(cartSelector)
+    const {cart} =  useSelector(cartSelector)
     const dispatch = useAppDispacth()
     
     const getCart = async() =>{
@@ -24,7 +23,7 @@ function Cart (){
 
     return(
         <FlatList
-            data={cart.cart}
+            data={cart}
             renderItem={(
                 {item,index})=>( (index % 2 == 0)
                 ?<CardCart items={item}  background='#ffffff' />
@@ -35,6 +34,9 @@ function Cart (){
             ListFooterComponent={
                 <Button mode="contained"  buttonColor='#5677fc' style={{borderRadius:10,marginTop:10,marginHorizontal:5,marginBottom:20,backgroundColor:"#ff4c3b"}}>Continue</Button>
             }
+            style={{
+                backgroundColor:"#fff"
+            }}
         />
     )
 }

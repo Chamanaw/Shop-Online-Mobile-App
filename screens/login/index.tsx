@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { View,Image } from 'react-native'
 import { TextInput, Text, Button } from 'react-native-paper';
 import style from './style';
-import { login,userSelector,fetchUser,errorMessage, resetErrorMessage } from '../../redux/slices/userSlice';
+import { login,userSelector,fetchUser,resetErrorMessage } from '../../redux/slices/userSlice';
 import { useSelector } from 'react-redux';
 import { useAppDispacth } from '../../redux/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStack } from '../../navigation/stackNavigator';
+import { fetchCart } from '../../redux/slices/cartSlice';
 
 type Props = NativeStackScreenProps<RootStack,"ProfileStack">
 
@@ -15,15 +16,16 @@ function Login({navigation}:Props) {
 
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("")
+    const [error,setError] = useState<boolean>(false)
     const user = useSelector(userSelector)
     const dispatch = useAppDispacth()
 
     const handleSubmit = async () => {
-        const inputEmpty = username.match(/\w{4,}/) && password.match(/\w{4,}/)
-        if(!inputEmpty){
-            await dispatch(errorMessage("Please enter your username or password."))
+        if(!username || !password){
+            setError(true)
             return
         }
+        setError(false)
         const userData = {username:username,password:password}
         await dispatch(login(userData))
         const access_token = await AsyncStorage.getItem("accessToken")
@@ -31,17 +33,21 @@ function Login({navigation}:Props) {
             return
         }
         await dispatch(fetchUser())
+        await dispatch(fetchCart())
         navigation.navigate("HomeStack",{screen:"home"})
 
     }
-
-    useEffect(()=>{
-        dispatch(resetErrorMessage())
-    },[])
+ 
+    useEffect(() => {
+        navigation.addListener('focus', () => {
+          dispatch(resetErrorMessage())
+        });
+    
+    },[]);
 
     return (
         <View style={style.container}>
-            <Image source={require("../../assets/logo/logo-App.jpg")}
+            <Image source={require("../../assets/logo/logo-App.png")}
                         style={{ marginTop: 5,width:200,height:100 }}
             />
             <View style={style.subContainer}>
@@ -50,23 +56,23 @@ function Login({navigation}:Props) {
                 <TextInput
                     mode='outlined'
                     label="Username"
-                    value={username}
-                    onChangeText={text => setUsername(text)}
+                    onChangeText={(text)=>setUsername(text)}
                     outlineColor='#bdbdbd'
                     activeOutlineColor='#039be5'
                     selectionColor='black'
                     outlineStyle={{ backgroundColor: "#fafafa"}}
+                    error={!username && error}
                 />
                 <TextInput
                     mode='outlined'
                     label="Password"
-                    value={password}
-                    onChangeText={text => setPassword(text)}
+                    onChangeText={(text)=>setPassword(text)}
                     secureTextEntry={true}
                     outlineColor='#bdbdbd'
                     activeOutlineColor='#039be5'
                     selectionColor='black'
                     outlineStyle={{ backgroundColor: "#fafafa"}}
+                    error={!password && error}
                 />
                 <Button mode="contained" buttonColor='#ff4c3b' style={{ borderRadius: 5, marginTop: 10 }} onPress={handleSubmit} loading={user.loading}>Continue</Button>
                 <View style={style.linkContainer}>

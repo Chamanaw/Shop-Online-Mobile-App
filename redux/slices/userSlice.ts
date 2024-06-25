@@ -6,18 +6,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 type UserState = {
-    user: UserType | null,
+    user: UserType
     loading: boolean,
     error: string,
-    dialogSignup: boolean,
-    errorSignup:string
+    success:boolean
 }
 const initialState: UserState = {
-    user: null,
+    user: defaultValueUser,
     loading: false,
     error: '',
-    dialogSignup: false,
-    errorSignup:''
+    success: false
 }
 interface UserLogin {
     username: string,
@@ -46,7 +44,19 @@ export const signup = createAsyncThunk('/user/signup', async (payload: UserSigup
     await axios.post('/api/user/signup', payload)
 })
 
+export const updateUsername = createAsyncThunk('/user/updateusername',async (payload:string)=>{
+    await axios.patch('/api/user/updateusername',{newUsername:payload})
+    return payload
+})
 
+export const updatePassword = createAsyncThunk('user/updatepassword', async (payload:string)=>{
+    await axios.patch('/api/user/updatepassword',{newPassword:payload})
+})
+
+export const updateEmail = createAsyncThunk('user/updateEmail', async (payload:string)=>{
+    await axios.patch('/api/user/updateEmail',{newEmail:payload})
+    return payload
+})
 
 const userSlice = createSlice({
     name: "user",
@@ -55,58 +65,53 @@ const userSlice = createSlice({
         errorMessage: (state, action: PayloadAction<string>) => {
             state.error = action.payload
         },
-        setDialogSignup:(state,action:PayloadAction<boolean>)=>{
-            state.dialogSignup =action.payload
-        },
-        errorSignup:(state,action: PayloadAction<string>)=>{
-            state.errorSignup = action.payload  
-        },
         resetErrorMessage:(state)=>{
-            state.errorSignup = ''
             state.error = ''
         },
         resetState:(state)=>{
-            state.user= null
-            state.error=''
-            state.errorSignup=''
-            state.dialogSignup=false
-            state.loading = false
+            return {...state,...initialState}
+        },
+        resetSuccess:(state)=>{
+            state.success = false
         }
     },
     extraReducers: (builder) => {
         builder.addMatcher((action) => action.type.endsWith("/pending"), (state) => {
             state.loading = true
         })
-        builder.addMatcher((action) => action.type.endsWith("/fulfilled"), (state, action: PayloadAction<UserType>) => {
+        builder.addMatcher((action) => action.type.endsWith("/fulfilled"), (state, action: PayloadAction<UserType | string>) => {
             state.loading = false
+            state.error = ''
+            
             if (action.type.includes('fetchuser')) {
                 state.user = action.payload as UserType
-                state.error = ''
-                state.loading = false
             }
-            else if (action.type.includes('login')) {
-                state.error = ''
-                state.loading = false
+            else if (action.type.includes('updateusername')){
+                state.user = {...state.user,user_name:action.payload as string}
+                state.success = true
             }
-            else if (action.type.includes('signup')) {
-                state.dialogSignup = true
-                state.error = ''
-                state.loading = false
+            else if (action.type.includes('updateEmail')){
+                state.user = {...state.user,email:action.payload as string}
+                state.success = true
             }
-
+            else if (action.type.includes("updatepassword")){
+                state.success = true
+            }
         })
         builder.addMatcher((action) => action.type.endsWith("/rejected"), (state: UserState, action) => {
             state.loading = false
+            state.success = false
             if (action.type.includes("login")) {
-                state.error = " User not find"
+                state.error = "Username or password is incorrect."
             }
+           
         })
 
     }
 })
 
 
-export const { errorMessage,setDialogSignup,errorSignup,resetErrorMessage,resetState } = userSlice.actions
+export const { errorMessage,resetErrorMessage,resetState,resetSuccess } = userSlice.actions
 export const userSelector = (store: RootState) => store.user
 export default userSlice.reducer
 

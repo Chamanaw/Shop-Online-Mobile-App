@@ -3,17 +3,16 @@ import { StyleSheet } from "react-native";
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
         alignItems: "center",
-        rowGap: 10,
+        rowGap: 3,
         paddingTop: 30,
         
     },
     settingContainer: {
         width: "90%",
-        rowGap:10,
-        marginTop:30,
-        paddingBottom:20
+        rowGap:20,
+        marginTop:10,
+        paddingBottom:80
     },
     button: { 
         marginTop: 5,

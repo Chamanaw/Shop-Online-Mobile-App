@@ -1,16 +1,15 @@
 import { createBottomTabNavigator, } from '@react-navigation/bottom-tabs';
-import { HomeScreenStack,CartScreenStack,CategoryScreenStack,LoginScreenStack } from './stackNavigator';
+import { HomeScreenStack,CartScreenStack,SearchScreenStack,LoginScreenStack } from './stackNavigator';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { RootStack } from './stackNavigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { CommonActions } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../redux/slices/userSlice';
 import { cartSelector } from '../redux/slices/cartSlice';
 
 
 type Home = NativeStackScreenProps<RootStack,'HomeStack'>
-type category = NativeStackScreenProps<RootStack,"CategoryStack">
+type Search = NativeStackScreenProps<RootStack,"SearchStack">
 type cart = NativeStackScreenProps<RootStack,"CartStack">
 type profile = NativeStackScreenProps<RootStack,"ProfileStack">
 
@@ -19,7 +18,7 @@ function TabNavigator (){
 
     const {cart} = useSelector(cartSelector)
     const Tab = createBottomTabNavigator<RootStack>();
-    const user = useSelector(userSelector)
+    const {user} = useSelector(userSelector)
 
     return(
         <Tab.Navigator screenOptions={{
@@ -37,29 +36,25 @@ function TabNavigator (){
                 
               }}
               listeners={({ navigation }:Home) => ({
-                tabPress: e => {
-                  e.preventDefault();
-                  navigation.dispatch(
-                    CommonActions.reset({
-                      index: 0,
-                      routes: [{ name: 'HomeStack' }],
-                    })
-                  );
-                },
+                tabPress:e=>{
+                  e.preventDefault()
+                  navigation.navigate('HomeStack',{screen:"home"})
+                }
               })}
             />
             <Tab.Screen
-              name='CategoryStack'
-              component={CategoryScreenStack}
+              name='SearchStack'
+              component={SearchScreenStack}
               options={{
-                tabBarLabel: "Category",
-                tabBarIcon: ({ color }) => <Ionicons name="list" size={24} color={color} />,
-                headerShown: false
+                tabBarLabel: "Search",
+                tabBarIcon: ({ color }) => <Ionicons name="search" size={24} color={color} />,
+                headerShown: false,
+                
               }}
-              listeners={({navigation}:category)=>({
+              listeners={({navigation}:Search)=>({
                 tabPress:e=>{
                   e.preventDefault()
-                  navigation.navigate('CategoryStack',{screen:"category"})
+                  navigation.navigate('SearchStack',{screen:"search"})
                 }
               })}
             />
@@ -85,13 +80,12 @@ function TabNavigator (){
               options={{
                 tabBarLabel: "User",
                 tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />,
-                headerTitle: "Log in",
                 headerShown: false
               }}
               listeners={({navigation}:profile)=>({
                   tabPress:e=>{
                     e.preventDefault()
-                    navigation.navigate('ProfileStack',{screen:(user.user)?'profile':'login'})
+                    navigation.navigate('ProfileStack',{screen:user.user_name?"profile":"login"})
                   }
               })}
             />
