@@ -1,4 +1,4 @@
-import { Snackbar } from "react-native-paper";
+import { Snackbar,Text } from "react-native-paper";
 import { StyleSheet, View} from "react-native";
 
 interface Props {
@@ -17,7 +17,7 @@ export default function SnackbarProduct({ open, setDismiss }: Props) {
             backgroundColor:"red",   
         }}
       >
-        item is already in the cart.
+        <Text variant="labelLarge" style={{ color: "#fff" }}>item is already in the cart.</Text>
       </Snackbar>
     </View>
   );

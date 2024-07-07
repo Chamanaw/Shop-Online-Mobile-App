@@ -21,7 +21,7 @@ function Signup({ navigation }: Props) {
     const [err,setErr] = useState<boolean>(false)
 
     const dispatch = useAppDispacth();
-    const user = useSelector(userSelector);
+    const {loading} = useSelector(userSelector);
 
     const handleSubmit = async () => {
         if(!username || !password || !email) {
@@ -99,6 +99,7 @@ function Signup({ navigation }: Props) {
                     style={{ marginTop: 20, borderRadius: 5, zIndex: 0 }}
                     buttonColor="#ff4b3a"
                     onPress={handleSubmit}
+                    loading={loading}
                 >
                     Continue
                 </Button>

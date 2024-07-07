@@ -13,9 +13,9 @@ interface Props {
 const DialogSignup = ({ open, setDialog,navigation }: Props) => {
     return (
         <Dialog visible={open} onDismiss={() => setDialog(false)} style={style.container} >
-            <Dialog.Title>Successful</Dialog.Title>
+            <Dialog.Title style={{color:"#000"}}>Successful</Dialog.Title>
             <Dialog.Content>
-                <Text variant="bodyMedium">Your has been sign up successfully.</Text>
+                <Text variant="bodyMedium" style={{color:"#000"}}>Your has been sign up successfully.</Text>
             </Dialog.Content>
             <Dialog.Actions>
                 <Button onPress={() =>{

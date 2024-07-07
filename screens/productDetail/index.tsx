@@ -19,7 +19,7 @@ type Props = NativeStackScreenProps<RootStack, "HomeStack">;
 function ProductDetail({ route, navigation }: Props) {
   const p_id = route.params?.product_id;
   const { products, currentProduct } = useSelector(productSelector);
-  const {cart} = useSelector(cartSelector)
+  const { cart } = useSelector(cartSelector)
   const dispatch = useAppDispacth();
 
   const [show, setShow] = useState(false);
@@ -43,7 +43,7 @@ function ProductDetail({ route, navigation }: Props) {
     let result = products.filter((ele) => ele.product_id === p_id);
     dispatch(current(result[0]));
   }, [p_id]);
-  
+
   return (
     <Provider>
       <ScrollView>
@@ -53,11 +53,11 @@ function ProductDetail({ route, navigation }: Props) {
             style={style.image}
             resizeMode="contain"
           />
-          <Text variant="titleLarge" style={{ fontWeight: "bold" }}>
+          <Text variant="titleLarge" style={{ fontWeight: "bold", color: "#000" }}>
             {currentProduct.name}
           </Text>
           <Text style={{ color: "#616161" }}>Brand:{currentProduct.brand}</Text>
-          <Text style={{ marginTop: 5 }}>{currentProduct.description}</Text>
+          <Text style={{ marginTop: 5, color: "#000" }}>{currentProduct.description}</Text>
           <View style={style.buttonContainer}>
             <Button
               mode="outlined"
@@ -72,8 +72,11 @@ function ProductDetail({ route, navigation }: Props) {
               mode="contained"
               style={{ borderRadius: 5, width: "50%" }}
               buttonColor="#002379"
-            >
-              Buy now
+
+            ><Text style={{ color: "#fff" }}>
+                Buy now
+              </Text>
+
             </Button>
           </View>
         </View>
@@ -81,7 +84,7 @@ function ProductDetail({ route, navigation }: Props) {
         <Portal>
           <SnackbarProduct open={show} setDismiss={setShow} />
         </Portal>
-        
+
       </ScrollView>
     </Provider>
   );

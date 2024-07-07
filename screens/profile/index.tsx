@@ -76,18 +76,18 @@ function Profile() {
                         size={130}
                         source={{ uri: axios.getUri() + user?.image }}
                     />
-                    <Text variant="titleLarge" style={{ fontWeight: "bold" }}>
+                    <Text variant="titleLarge" style={{ fontWeight: "bold",color:"#000" }}>
                         {user?.user_name.toUpperCase()}
                     </Text>
                     <Text variant="bodyLarge">
-                        <Text variant="titleMedium">Email:</Text> {user?.email}
+                        <Text variant="titleMedium" style={{color:"#000"}}>Email:</Text> <Text style={{color:"#000"}}>{user?.email}</Text> 
                     </Text>
                     <View style={style.settingContainer}>
-                        <Text variant="titleLarge" style={{ fontWeight: "bold" }}>
+                        <Text variant="titleLarge" style={{ fontWeight: "bold",color:"#000" }}>
                             Setting
                         </Text>
                         <View>
-                            <Text variant="bodyLarge" style={{ color: "#424242" }}>
+                            <Text variant="bodyLarge" style={{ color: "#000" }}>
                                 Change username
                             </Text>
                             <TextInput
@@ -104,7 +104,7 @@ function Profile() {
                                 }
                                 error={!newUsername && error && element == 1 ? true : false}
                             />
-                            <HelperText type="info">
+                            <HelperText type="info" style={{color:"#000"}}>
                                 Can only be used a-z A-Z 0-9 more than 5 character
                             </HelperText>
                             <Button
@@ -114,11 +114,11 @@ function Profile() {
                                 loading={element === 1 && loading}
                                 onPress={() => handleChangeUsername(1)}
                             >
-                                Continue
+                                 <Text style={{color:"#fff"}} >Continue</Text>
                             </Button>
                         </View>
                         <View>
-                            <Text variant="bodyLarge" style={{ color: "#424242" }}>
+                            <Text variant="bodyLarge" style={{ color: "#000" }}>
                                 Change password
                             </Text>
                             <TextInput
@@ -136,7 +136,7 @@ function Profile() {
                                 }
                                 error={!newPassword && error && element == 2 ? true : false}
                             />
-                            <HelperText type="info">
+                            <HelperText type="info" style={{color:"#000"}}>
                                 Can only be used a-z A-Z 0-9 more than 5 character
                             </HelperText>
                             <Button
@@ -146,11 +146,11 @@ function Profile() {
                                 loading={element === 2 && loading}
                                 onPress={() => handleChangePassword(2)}
                             >
-                                Continue
+                               <Text style={{color:"#fff"}} >Continue</Text> 
                             </Button>
                         </View>
                         <View>
-                            <Text variant="bodyLarge" style={{ color: "#424242" }}>
+                            <Text variant="bodyLarge" style={{ color: "#000" }}>
                                 Change email
                             </Text>
                             <TextInput
@@ -173,7 +173,7 @@ function Profile() {
                                 loading={element === 3 && loading}
                                 onPress={() => handleChangeEmail(3)}
                             >
-                                Continue
+                                 <Text style={{color:"#fff"}} >Continue</Text>
                             </Button>
                         </View>
                     </View>

@@ -18,7 +18,7 @@ const style = StyleSheet.create({
         marginTop: 5,
         borderRadius: 5,
         width: 150, 
-        backgroundColor:"#002278"
+        backgroundColor:"#002278",
     },
     buttonLogout:{
         borderRadius: 5,
