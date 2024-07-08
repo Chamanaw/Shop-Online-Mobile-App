@@ -96,7 +96,13 @@ function Profile() {
                                 outlineColor="#bdbdbd"
                                 activeOutlineColor="#039be5"
                                 selectionColor="black"
-                                style={{ backgroundColor: "#fafafa" }}
+                                style={{ backgroundColor: "#fafafa", }}
+                                textColor="#000"
+                                theme={{
+                                    colors:{
+                                        error:"red"
+                                    }
+                                }}
                                 onChangeText={(text) =>
                                     text.match(/\w{5,}/)
                                         ? setNewUsername(text)
@@ -113,6 +119,7 @@ function Profile() {
                                 buttonColor="#039be5"
                                 loading={element === 1 && loading}
                                 onPress={() => handleChangeUsername(1)}
+                                labelStyle={{color:"#fff"}}
                             >
                                  <Text style={{color:"#fff"}} >Continue</Text>
                             </Button>
@@ -128,7 +135,13 @@ function Profile() {
                                 outlineColor="#bdbdbd"
                                 activeOutlineColor="#039be5"
                                 selectionColor="black"
-                                style={{ backgroundColor: "#fafafa" }}
+                                style={{ backgroundColor: "#fafafa"}}
+                                textColor="#000"
+                                theme={{
+                                    colors:{
+                                        error:"red"
+                                    }
+                                }}
                                 onChangeText={(text) =>
                                     text.match(/\w{5,}/)
                                         ? setNewPassword(text)
@@ -145,6 +158,7 @@ function Profile() {
                                 buttonColor="#039be5"
                                 loading={element === 2 && loading}
                                 onPress={() => handleChangePassword(2)}
+                                labelStyle={{color:"#fff"}}
                             >
                                <Text style={{color:"#fff"}} >Continue</Text> 
                             </Button>
@@ -156,9 +170,15 @@ function Profile() {
                             <TextInput
                                 mode="outlined"
                                 label="New email"
-                                style={{ backgroundColor: "#fafafa", marginBottom: 10 }}
+                                style={{ backgroundColor: "#fafafa", marginBottom: 10}}
                                 activeOutlineColor="#039be5"
                                 selectionColor="black"
+                                textColor="#000"
+                                theme={{
+                                    colors:{
+                                        error:"red"
+                                    }
+                                }}
                                 onChangeText={(text) =>
                                     text.match(/\w{5,}\@\w{5,}/)
                                         ? setNewEmail(text)
@@ -172,6 +192,7 @@ function Profile() {
                                 buttonColor="#039be5"
                                 loading={element === 3 && loading}
                                 onPress={() => handleChangeEmail(3)}
+                                labelStyle={{color:"#fff"}}
                             >
                                  <Text style={{color:"#fff"}} >Continue</Text>
                             </Button>
